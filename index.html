@@ -100,6 +100,10 @@
       color: var(--BrightBlue);
     }
 
+    .filterActive {
+      color: var(--BrightBlue);
+    }
+
     .foot-center {
       display: flex;
       justify-content: space-between;
@@ -120,6 +124,22 @@
 
     .item input {
       opacity: 0;
+    }
+
+    #newtarefa {
+      opacity: 1;
+      background-color: transparent;
+      border: 2px solid transparent;
+      color: var(--dt-LightGrayishBlue);
+      padding-top: 5px;
+      width: 100%;
+    }
+
+    #newtarefa:focus,
+    #newtarefa:focus {
+      box-shadow: 0 0 0 0;
+      outline: 0;
+      border: 2px solid transparent;
     }
 
     .item span {
@@ -188,7 +208,6 @@
       background-size: cover;
     }
 
-
     .item label,
     .item span {
       cursor: pointer;
@@ -196,8 +215,6 @@
   </style>
 
 </head>
-
-
 
 <body>
   <div class="container-fluid">
@@ -212,8 +229,7 @@
       </div>
       <div class="item-head item">
         <span></span>
-        <label for="newtarefa">Create a new todo...</label>
-        <input type="text" id="newtarefa">
+        <input type="text" id="newtarefa" placeholder="Create a new todo...">
 
       </div>
       <div class="list">
@@ -224,9 +240,9 @@
           <h6 class="text-foot items-left">5 items left</h6>
         </div>
         <div class="text-center foot-center">
-          <h6 class="text-foot">All</h6>
-          <h6 class="text-foot">Active</h6>
-          <h6 class="text-foot">Completed</h6>
+          <h6 onclick="pressFilter('all')" class="text-foot all">All</h6>
+          <h6 onclick="pressFilter('active')" class="text-foot active">Active</h6>
+          <h6 onclick="pressFilter('completed')" class="text-foot completed">Completed</h6>
         </div>
         <div class="text-right foot-right">
           <h6 class="text-foot">Clear Completed</h6>
@@ -240,6 +256,9 @@
 <script src="bootstrap/js/bootstrap.js"></script>
 <script src="https://kit.fontawesome.com/3528ad562d.js" crossorigin="anonymous"></script>
 <script>
+
+  let filter = ['all', 'active', 'completed'];
+  let activeFilter = 'all';
 
   let itens = [
     {
@@ -263,9 +282,27 @@
 
   function loadItens() {
     let cont = 0;
+
+    for (const item of filter) {
+      if (item == activeFilter) $(`.${item}`).addClass('filterActive');
+      else $(`.${item}`).removeClass('filterActive');
+    }
+
     $('.list').empty();
-    $.each(itens, (i, dados) => {
-      if (!dados.check) cont++;
+
+    let newitem = [];
+    itens.filter((item, i) => {
+      if (activeFilter == 'all') newitem.push(item);
+      else if (activeFilter == 'active') {
+        if (!item.check) newitem.push(item)
+      }
+      else if (activeFilter == 'completed') {
+        if (item.check) newitem.push(item)
+      }
+    })
+
+    $.each(newitem, (i, dados) => {
+      cont++;
       let check = !dados.check ? '<span></span>' :
         `<span class="selected">
           <i class="fa-solid fa-check"></i>
@@ -283,6 +320,11 @@
     $('.items-left').html(`${cont} items left`);
   }
 
+  function pressFilter(newFilter) {
+    activeFilter = newFilter;
+    loadItens();
+  }
+
   function changeStatus(id, selected) {
     itens.map((item, i) => {
       if (i == id) {
@@ -296,6 +338,27 @@
     })
     loadItens();
   }
+
+  function newTarefa(tarefa) {
+    let obj = {
+      id: itens[itens.length - 1].id + 1,
+      descricao: tarefa,
+      check: false
+    }
+
+    itens.push(obj);
+    $('#newtarefa').val('');
+    loadItens();
+  }
+
+  document.addEventListener('keydown', function (event) {
+    var code = event.keyCode || event.which;
+    if (code === 9 && $('#newtarefa').val()) {
+      newTarefa($('#newtarefa').val())
+    }
+  });
+
+
 </script>
 
 </html>
