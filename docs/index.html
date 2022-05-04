@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+
+  <title>Todo app</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
+
+    :root {
+      --BrightBlue: hsl(220, 98%, 61%);
+      --CheckBackground: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+
+      --lt-VeryLightGray: hsl(0, 0%, 98%);
+      --lt-VeryLightGrayishBlue: hsl(236, 33%, 92%);
+      --lt-LightGrayishBlue: hsl(233, 11%, 84%);
+      --lt-DarkGrayishBlue: hsl(236, 9%, 61%);
+      --lt-VeryDarkGrayishBlue: hsl(235, 19%, 35%);
+
+      --dt-darkblue: hsl(235, 30%, 17%);
+      --dt-VeryDarkBlue: hsl(235, 21%, 11%);
+      --dt-VeryDarkDesaturatedBlue: hsl(235, 24%, 19%);
+      --dt-LightGrayishBlue: hsl(234, 39%, 85%);
+      --dt-LightGrayishBlue-hover: hsl(236, 33%, 92%);
+      --dt-DarkGrayishBlue: hsl(234, 11%, 52%);
+      --dt-VeryDarkGrayishBlue: hsl(233, 14%, 35%);
+      --dt-VeryDarkGrayishBlue: hsl(237, 14%, 26%);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Josefin Sans', sans-serif;
+    }
+
+    .container-fluid {
+      padding: 0;
+    }
+
+    .header {
+      background-image: url(images/bg-desktop-dark.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 35vh;
+    }
+
+    .background {
+      height: 65vh;
+      background-color: var(--dt-VeryDarkBlue);
+    }
+
+    .todo {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      height: 70vh;
+      padding: 0;
+      transform: translateX(-50%);
+    }
+
+    .list {
+      border-radius: 5px;
+      background-color: var(--dt-VeryDarkDesaturatedBlue);
+    }
+
+    .item,
+    .item-head,
+    .item-foot {
+      width: 100%;
+      height: 6vh;
+    }
+
+    .item-foot {
+      background-color: var(--dt-VeryDarkDesaturatedBlue);
+      border-radius: 5px;
+      height: 5vh;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-foot div {
+      width: 33%;
+    }
+
+    .text-foot {
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--dt-DarkGrayishBlue);
+      transition: all .3s;
+    }
+
+    .text-foot:hover {
+      color: var(--BrightBlue);
+    }
+
+    .filterActive {
+      color: var(--BrightBlue);
+    }
+
+    .foot-center {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .item {
+      border-bottom: .5px solid var(--dt-DarkGrayishBlue);
+      color: var(--dt-LightGrayishBlue);
+      display: flex;
+      align-items: center;
+      padding-left: 25px;
+      height: 65px;
+    }
+
+    .item label {
+      height: 20%;
+    }
+
+    .item input {
+      opacity: 0;
+    }
+
+    #newtarefa {
+      opacity: 1;
+      background-color: transparent;
+      border: 2px solid transparent;
+      color: var(--dt-LightGrayishBlue);
+      padding-top: 5px;
+      width: 100%;
+    }
+
+    #newtarefa:focus,
+    #newtarefa:focus {
+      box-shadow: 0 0 0 0;
+      outline: 0;
+      border: 2px solid transparent;
+    }
+
+    .item span {
+      display: inline-block;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      border: 1px solid var(--dt-DarkGrayishBlue);
+      margin-right: 20px;
+      display: flex;
+      justify-content: center;
+      padding: 6px 0 0 1px;
+    }
+
+    .selected {
+      background-image: var(--CheckBackground);
+    }
+
+    .div-selected label {
+      text-decoration: line-through;
+      color: var(--dt-DarkGrayishBlue);
+    }
+
+    .div-selected {
+      background-color: var(--dt-darkblue);
+    }
+
+    .fa-check {
+      font-size: 12px;
+      color: white;
+    }
+
+    .list div:nth-child(1) {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+
+    .item-head {
+      background-color: var(--dt-darkblue);
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border-bottom: 1px solid transparent;
+      height: 65px;
+      color: var(--dt-DarkGrayishBlue);
+    }
+
+    .title {
+      position: absolute;
+      top: -90px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .title h1 {
+      color: white;
+      font-size: 35px;
+      font-weight: 700;
+      letter-spacing: 15px;
+    }
+
+    .icon {
+      width: 28px;
+      height: 28px;
+      background-image: url(images/icon-sun.svg);
+      background-size: cover;
+    }
+
+    .item label,
+    .item span {
+      cursor: pointer;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="col-12 header">
+
+    </div>
+    <div class="col-12 background"></div>
+    <div class="col-4 todo">
+      <div class="title">
+        <h1>TODO</h1>
+        <div class="icon"></div>
+      </div>
+      <div class="item-head item">
+        <span></span>
+        <input type="text" id="newtarefa" placeholder="Create a new todo...">
+
+      </div>
+      <div class="list">
+
+      </div>
+      <div class="item-foot px-4 pt-2">
+        <div class="text-left foot-left">
+          <h6 class="text-foot items-left">5 items left</h6>
+        </div>
+        <div class="text-center foot-center">
+          <h6 onclick="pressFilter('all')" class="text-foot all">All</h6>
+          <h6 onclick="pressFilter('active')" class="text-foot active">Active</h6>
+          <h6 onclick="pressFilter('completed')" class="text-foot completed">Completed</h6>
+        </div>
+        <div class="text-right foot-right">
+          <h6 class="text-foot">Clear Completed</h6>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="bootstrap/js/bootstrap.js"></script>
+<script src="https://kit.fontawesome.com/3528ad562d.js" crossorigin="anonymous"></script>
+<script>
+
+  let filter = ['all', 'active', 'completed'];
+  let activeFilter = 'all';
+
+  let itens = [
+    {
+      id: 0,
+      descricao: 'Item qualquer',
+      check: true
+    },
+    {
+      id: 1,
+      descricao: 'Outro item foda',
+      check: false
+    },
+    {
+      id: 2,
+      descricao: 'Chave jdocovit',
+      check: false
+    }
+  ]
+
+  loadItens();
+
+  function loadItens() {
+    let cont = 0;
+
+    for (const item of filter) {
+      if (item == activeFilter) $(`.${item}`).addClass('filterActive');
+      else $(`.${item}`).removeClass('filterActive');
+    }
+
+    $('.list').empty();
+
+    let newitem = [];
+    itens.filter((item, i) => {
+      if (activeFilter == 'all') newitem.push(item);
+      else if (activeFilter == 'active') {
+        if (!item.check) newitem.push(item)
+      }
+      else if (activeFilter == 'completed') {
+        if (item.check) newitem.push(item)
+      }
+    })
+
+    $.each(newitem, (i, dados) => {
+      cont++;
+      let check = !dados.check ? '<span></span>' :
+        `<span class="selected">
+          <i class="fa-solid fa-check"></i>
+        </span>`;
+
+      let item =
+        `<div class="item ${dados.check ? 'div-selected' : ''}" id='${dados.id}' onclick='changeStatus(${dados.id},${dados.check})'>
+          ${check}
+          <label for="${dados.id}">${dados.descricao}</label>
+          <input type="checkbox" id="${dados.id}">
+        </div>`;
+      $('.list').append(item);
+    });
+
+    $('.items-left').html(`${cont} items left`);
+  }
+
+  function pressFilter(newFilter) {
+    activeFilter = newFilter;
+    loadItens();
+  }
+
+  function changeStatus(id, selected) {
+    itens.map((item, i) => {
+      if (i == id) {
+        const newobj = {
+          id: item.id,
+          descricao: item.descricao,
+          check: !selected
+        }
+        itens[i] = newobj;
+      }
+    })
+    loadItens();
+  }
+
+  function newTarefa(tarefa) {
+    let obj = {
+      id: itens[itens.length - 1].id + 1,
+      descricao: tarefa,
+      check: false
+    }
+
+    itens.push(obj);
+    $('#newtarefa').val('');
+    loadItens();
+  }
+
+  document.addEventListener('keydown', function (event) {
+    var code = event.keyCode || event.which;
+    if (code === 9 && $('#newtarefa').val()) {
+      newTarefa($('#newtarefa').val())
+    }
+  });
+
+
+</script>
+
+</html>
